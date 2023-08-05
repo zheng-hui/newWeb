@@ -1,37 +1,34 @@
 <?php
 session_start();
 include "dbFunctions.php";
-var_dump($_POST);
 
 $entered_username = $_POST['username'];
 $entered_password = $_POST['password'];
 
-$login = true;
-
 $queryCheck = "SELECT * FROM users
-          WHERE username='$entered_username'
-          AND password = '$entered_password'";
+          WHERE username=?
+          AND password = ?";
 
-$resultCheck = mysqli_query($link, $queryCheck) or die(mysqli_error($link));
+//using prepared statements
 
-if (mysqli_num_rows($resultCheck) == 1) {
+$stmt = mysqli_prepare($link, $queryCheck);
+mysqli_stmt_bind_param($stmt, "ss", $entered_username, $entered_password);
+mysqli_stmt_execute($stmt);
+
+$resultCheck = mysqli_stmt_get_result($stmt);
+
+if (mysqli_num_rows($resultCheck)) {
     $row = mysqli_fetch_array($resultCheck);
     $_SESSION['userid'] = $row['userid'];
     $_SESSION['username'] = $row['username'];
     $_SESSION['password'] = $row['password'];
     $_SESSION['email'] = $row['email'];
-    $login = true;
-    
-    if (isset($_POST['remember'])){
-        setcookie("username", $row['username'], time()+3600*24*100);
-    }
-    
 } else {
-    $login = false;
 }
 
 mysqli_close($link);
 ?>
+
 <html>
     <head>
         <title>Login</title>
@@ -54,7 +51,7 @@ mysqli_close($link);
         }
     </style>
     <body>
-                <nav class="navbar navbar-expand-sm p-3 mb-2 navbar-custom">
+                       <nav class="navbar navbar-expand-sm p-3 mb-2 navbar-custom">
             <div>
                 <i class="fa fa-solid fa-hotel"  aria-hidden="true"></i>
             </div>
@@ -70,28 +67,31 @@ mysqli_close($link);
                             <a class="nav-link" href="homepage.php"><span class="text-white">Hotels</a></span>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="contactUs.php"><span class="text-white">ContactUs</a></span>
+                            <a class="nav-link" href="contactUs.php"><span class="text-white">Contact Us</a></span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="tourist.php"><span class="text-white">Country Origin</a></span>
                         </li>
                         <div class="justify-content-right">
                         <li class="nav-item">
                         <?php
-                        if(isset($_SESSION['userId'])) {
+                        if(isset($_SESSION['userid'])) {
                         ?>
                             <a class="nav-link" href="logout.php"><span class="text-white">Logout</a></span>
                         <?php } else { ?>
                             <a class="nav-link" href="login.php"><span class="text-white">Login/Register</a></span>
                         <?php } ?>
-                        </li></div>  
+                        </li></div>
                     </ul>
                 </div>
             </div>
         </nav>
         <?php
-                if(isset($_SESSION['userId'])) {
+                if(isset($_SESSION['username'])) {
          ?>
                 <h4>Welcome <?php echo $_SESSION['username'] ?>!</h4>
-        <?php } ?>
-        <?php if($login ==true){ ?>
+      
+       
     <center>
         <form id='form' name='LoginUser' method='post'>
             <h1 font-weight="bold">Successfully Logged In!</h1>
