@@ -59,6 +59,9 @@ if (isset($_COOKIE['username'])){
         </nav>
         <form method="post" action="doLogin.php">
             <h1 font-weight="bold">Login</h1>
+            
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
+            
             Username: <input id="idUsername" type="text" name="username" value="<?php echo $rememberUsername; ?>"/>
             <br/>
             Your password: <input id="idName" type="password" name="password" />
