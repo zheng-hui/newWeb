@@ -46,10 +46,13 @@ if (isset($_COOKIE['username'])){
                         <li class="nav-item">
                             <a class="nav-link" href="contactUs.php"><span class="text-white">Contact Us</a></span>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="tourist.php"><span class="text-white">Country Origin</a></span>
+                        </li>
                         <div class="justify-content-right">
                         <li class="nav-item">
                             <a class="nav-link" href="login.php"><span class="text-white">Login/Register</a></span>
-                        </li></div>  
+                        </li></div> 
                     </ul>
                 </div>
             </div>
