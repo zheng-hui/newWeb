@@ -31,7 +31,7 @@ mysqli_close($link);
 
 <html>
     <head>
-        <title>Login</title>
+        <title>doLogin</title>
         <!--  Include reference to CSS stylesheet here -->
         <link rel="stylesheet" type="text/css" href="stylesheets/style_login.css"/>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -104,6 +104,7 @@ mysqli_close($link);
             <h1 font-weight="bold">Login Failed</h1>
             <br><br/>
             <p>No matching record found!</p>
+            <input type="hidden" name="csrf_token" value="<?php echo $_SESSION['csrf_token']; ?>" />
             <p>Click here to <a href="login.php">Login</a> again</p>
                 </form>
         <?php } ?>
