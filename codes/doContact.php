@@ -5,7 +5,8 @@ include "dbFunctions.php";
 $name = $_POST['name'];
 $questions = $_POST['questions'];
 $email= $_POST['email'];
-
+$questions = stripslashes($questions);
+$questions = htmlspecialchars($questions);
 
 $add = true;
 $query = "INSERT INTO questions (name, email, questions)
@@ -40,7 +41,7 @@ else {
         }
     </style>
     <body>
-                <nav class="navbar navbar-expand-sm p-3 mb-2 navbar-custom">
+                       <nav class="navbar navbar-expand-sm p-3 mb-2 navbar-custom">
             <div>
                 <i class="fa fa-solid fa-hotel"  aria-hidden="true"></i>
             </div>
@@ -56,9 +57,21 @@ else {
                             <a class="nav-link" href="homepage.php"><span class="text-white">Hotels</a></span>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="editUser.php"><span class="text-white">Contact Us </a></span>
+                            <a class="nav-link" href="contactUs.php"><span class="text-white">Contact Us</a></span>
                         </li>
-
+                        <li class="nav-item">
+                            <a class="nav-link" href="tourist.php"><span class="text-white">Country Origin</a></span>
+                        </li>
+                        <div class="justify-content-right">
+                        <li class="nav-item">
+                        <?php
+                        if(isset($_SESSION['userid'])) {
+                        ?>
+                            <a class="nav-link" href="logout.php"><span class="text-white">Logout</a></span>
+                        <?php } else { ?>
+                            <a class="nav-link" href="login.php"><span class="text-white">Login/Register</a></span>
+                        <?php } ?>
+                        </li></div>
                     </ul>
                 </div>
             </div>
@@ -67,14 +80,18 @@ else {
         <?php if($add ==true){ ?>
     <center>
         <form id='form' name='doContact' method='post'>
-            <h1 font-weight="bold">Query Successfully Submitted!</h1>
+            <h1 font-weight="bold">Your Query  is Successfully Submitted!</h1>
+            <p>Name: <?php echo $name; ?></p>
+            <p>Email: <?php echo $email; ?></p>       
+            <p>Query: <?php echo $questions; ?></p>
             <br/><br/>
             <h1 font-weight="bold">We will get back to you soon!</h1>
                 <a href="homepage.php">Back</a> to hotel page!
                 </form>
+    </center>
             <?php
         } else { ?>
-            Query failed submit.
+            Query failed to submit.
         <?php } ?>
     </body>
 </html>
